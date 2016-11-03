@@ -1,0 +1,209 @@
+--dialog:反転(0-1),hanten=0;ブラ(0-1),bura=1;インナー(0-2),innner=1;パーカー(0-2),parker=2;頭のやつ(0-2),headparts=1;メガネ(0-1),megane=0;インカム(0-1),inkamu=0;デカ汗(0-1),dekaase=0;焦る/chk,aseru=0;ため息/chk,tameiki=0;涙/chk,namida=0;
+--check0:額影,0
+--track0:表情,0,31,1,1
+--track1:リアクション,0,10,0,1
+--track2:赤面,0,3,1,1
+--track3:額汗,0,3,0,1
+
+--モジュールロード
+require("tesc")
+require("spg")
+require("gvgen_kzme_tatie_cktmp")
+
+--キャッシュONOFF変数（デフォルトでは効力を発揮しません。詳しくはコードの下の方を御覧ください。）
+local cacheswitch = true
+
+--設定の解析、変数への代入
+local hitaikage=1
+if (obj.check0==true) then
+hitaikage=1
+else
+hitaikage=0
+end
+local hyoujo=obj.track0
+local reaction=obj.track1
+local sekimen=obj.track2
+local hitaiase=obj.track3
+
+--キャッシュ比較用に立ち絵タイトル+設定変数全部つなげた奴
+--以下この変数を「設定変数」とする
+local confchangechk="MtU結月ゆかり"..hanten..bura..innner..parker..headparts..megane..inkamu..dekaase..aseru..tameiki..namida..hitaikage..hyoujo..reaction..sekimen..hitaiase
+
+--パスやらファイル名やらをすべて変数にした奴
+--正直下の処理部分にある程度は直打ちで問題ない
+--開発中にファイル名とか覚えるのだるかったので変数にした
+local sozaipath=obj.getinfo("script_path").."yukari_mtu\\"--パスの区切りは\\で、パスの最後にも付ける。
+local path_reverse="（反転用）"
+local path_base1="本体"
+local path_base2="本体フード用"
+local path_bura="ブラ"
+local path_inner1="インナー"
+local path_inner2="インナー（マイルド）"
+local path_sekimen1="ほっぺ"
+local path_sekimen2="ほっぺ２"
+local path_atamano="頭の"
+local path_tsuki="月"
+local path_perker1="パーカー"
+local path_perker2="パーカーフード"
+local path_momiagemae="もみあげ（手前）"
+local path_momiageare="もみあげのアレ"
+local path_hitaiase1="汗１"
+local path_hitaiase2="汗２"
+local path_face={}
+path_face[1]="通常１"
+path_face[2]="通常２"
+path_face[3]="通常３"
+path_face[4]="笑顔１"
+path_face[5]="笑顔１＋"
+path_face[6]="笑顔２"
+path_face[7]="笑顔３"
+path_face[8]="いくぜっ"
+path_face[9]="むむむっ"
+path_face[10]="おこだよ"
+path_face[11]="ドヤァ…"
+path_face[12]="YAHOO！！"
+path_face[13]="はわわ"
+path_face[14]="びっくり"
+path_face[15]="恥ずかしい"
+path_face[16]="じとー"
+path_face[17]="へっ"
+path_face[18]="得意げ"
+path_face[19]="苦笑"
+path_face[20]="残念"
+path_face[21]="ため息"
+path_face[22]="ウインク１"
+path_face[23]="ウインク２"
+path_face[24]="むっ"
+path_face[25]="悲"
+path_face[26]="悪い顔"
+path_face[27]="不満"
+path_face[28]="……"
+path_face[29]="ダメージ"
+path_face[30]="わはは"
+path_face[31]="しょんぼり"
+local path_kaokage="影"
+local path_incam1="インカム"
+local path_incam2="インカムフード"
+local path_megane="めがね"
+local path_reaction={}
+path_reaction[1]="Σ"
+path_reaction[2]="？"
+path_reaction[3]="！"
+path_reaction[4]="！？"
+path_reaction[5]="ｷﾗｷﾗ"
+path_reaction[6]="おっ"
+path_reaction[7]="はーと"
+path_reaction[8]="はーと２"
+path_reaction[9]="♪"
+path_reaction[10]="おこ"
+local path_dekaase="汗４"
+local path_awateru="汗３"
+local path_tameiki="ふぅ"
+local path_namida="涙"
+
+--仮想バッファの初期化(width,height)
+--これはキャッシュドローの際は全く同じデータが仮想バッファに書き込まれるので必要はない
+tesc.drfirst(1024,1280)
+
+--[[※1 キャッシュを変数で制御する場合の差分です。
+function tatiedraw()
+]]
+
+--ckcache関数で設定変数を比較する
+--キャッシュ時の設定変数と同じ→キャッシュドローしてfalseを返す
+--キャッシュ時の設定変数と異なる→trueを返す
+if(tesc.ckcache(confchangechk,obj.layer)==true) then
+
+    --描画時に反転するかどうか（1を入れると反転）
+    tesc.hantenval(hanten)
+
+    --素材の共通パスを指定
+    tesc.sozaipathval(sozaipath)
+
+    --反転時に別ファイルを利用する場合にファイル名の後ろに付ける文字列を指定
+    tesc.reverseval(path_reverse)
+
+    --[[
+        描画制御関数の使い方
+
+        引数に関して
+            sozaipathvalで設定したパスにfileの文字列を結合したものを描画します。
+            その為、引数のfileには、sozaipathval関数で設定したものの相対パスのようなものを指定する必要があります。
+ 
+        onoff(value,file1)
+            valueが1の場合はfile1を描画する。
+
+        onoff2(value,file1,file2)
+            valueが1の場合はfile1を描画、2の場合はfile2を描画
+
+        nomdraw(file1)
+            file1を描画
+
+        dual(value,file1,file2)
+            valueが1の場合はfile1を描画、2の場合はfile2を描画、3の場合は両方を描画
+
+        zerooff(value,file1)
+            valueが0の場合は何も描画しない。それ以外の場合はfile1を描画する。
+            配列などを利用する場合はこれを使うと良いかもです。
+            example:zerooff(face,path_face[face])
+
+        onlyfilter(value,filter,file1,file2)
+            valueがfilterの場合、file1を描画、それ以外の場合はfile2を描画
+            特定のパーツを利用している場合に別の描画を行いたい場合に使用します。
+
+        revpath(file1)
+            反転描画時にfile1にreverseval関数で指定した文字列を結合したものを返します。
+
+        本examplescript製作時は上記の関数のみですが、今後tesc.luaのアップデートによりパターンが増える可能性はあります。
+        また、独自に条件式を作る場合はnomdraw関数を利用してください。
+        あと村田さんにその条件式を教えていただけるとtesc.luaのアップデート時に実装するのでぜひ教えてください。お願いします。
+    ]]
+    tesc.onlyfilter(parker,2,path_base2,path_base1)
+    tesc.onoff(bura,path_bura)
+    tesc.onoff2(innner,path_inner2,path_inner1)
+    tesc.dual(sekimen,path_sekimen1,path_sekimen2)
+    tesc.onoff2(headparts,tesc.revpath(path_atamano),tesc.revpath(path_tsuki))
+    tesc.onoff2(parker,path_perker1,path_perker2)
+    tesc.nomdraw(path_momiagemae)
+    tesc.nomdraw(path_momiageare)
+    tesc.dual(hitaiase,path_hitaiase1,path_hitaiase2)
+    tesc.zerooff(hyoujo,path_face[hyoujo])
+    tesc.onoff(hitaikage,path_kaokage)
+    if(inkamu==1) then
+        tesc.onlyfilter(parker,2,path_incam2,path_incam1)
+    end
+    tesc.onoff(megane,path_megane)
+    tesc.zerooff(reaction,path_reaction[reaction])
+    tesc.onoff(dekaase,path_dekaase)
+    tesc.onoff(aseru,path_awateru)
+    tesc.onoff(tameiki,path_tameiki)
+    tesc.onoff(namida,path_namida)
+
+
+    tesc.cache(obj.layer,confchangechk)--キャッシュを作成、設定変数を保存
+end
+
+obj.load("tempbuffer")--画面表示を行う命令
+
+--[[
+キャッシュを行いたくない場合はif文で囲わず最後のキャッシュ作成の命令を削除すればキャッシュを行いません。
+また、変数でキャッシュのONOFFを切り替える場合は
+・下のコードのコメントアウトを外す
+・キャッシュ有無を調べるif文の上にある「※1」の命令のコメントアウトを外す
+・キャッシュの有無を調べるif文をコメントアウト
+・キャッシュ命令をコメントアウト
+という風にコードを編集してください。
+なおこの場合にキャッシュのONOFFを切り替える変数はcacheswitch（trueかfalse）です
+]]
+
+
+--[[
+if(cacheswitch==true) then
+    if(tesc.ckcache(confchangechk,obj.layer)==true) then
+        tatiedraw()
+        tesc.cache(obj.layer,confchangechk)
+    end
+else
+    tatiedraw()
+end
+]]
