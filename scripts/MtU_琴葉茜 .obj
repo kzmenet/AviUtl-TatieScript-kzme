@@ -1,0 +1,122 @@
+--dialog:”½“](0-1),hanten=0;•(0-2),huku=2;ƒj[ƒ\(0-1),kneeso=1;”¯ü‚è(0-1),headparts=1;ƒfƒJŠ¾(0-1),dekaase=0;Å‚é/chk,aseru=0;‚½‚ß‘§/chk,tameiki=0;—Ü/chk,namida=0;
+--track0:•\î,0,23,1,1
+--track1:ƒŠƒAƒNƒVƒ‡ƒ“,0,10,0,1
+--track2:Ô–Ê,0,3,1,1
+--track3:ŠzŠ¾,0,3,0,1
+--check0:Šz‰e,0
+
+package.path = obj.getinfo("script_path").."mod\\?.lua"
+local ts = require("tesc")
+local spg = require("spg")
+local gvgen_kzme_tatie_cktmp = require("gvgen_kzme_tatie_cktmp")
+local cacheswitch = true
+
+local hitaikage
+if (obj.check0==true) then
+hitaikage=1
+else
+hitaikage=0
+end
+local hyoujo=obj.track0
+local reaction=obj.track1
+local sekimen=obj.track2
+local hitaiase=obj.track3
+
+local confchangechk="MtU‹Õ—tˆ©"..hanten..huku..kneeso..headparts..dekaase..aseru..tameiki..namida..hitaikage..hyoujo..reaction..sekimen..hitaiase
+
+local sozaipath=obj.getinfo("script_path").."akane_mtu\\"
+local path_reverse="i”½“]—pj"
+local path_base="‰º’…"
+local path_huku="•"
+local path_sode="‘³"
+local path_kneeso="ƒj[ƒ\"
+local path_kamikazari="”¯ü‚è"
+local path_hitaiase1="Š¾‚P"
+local path_hitaiase2="Š¾‚Q"
+local path_sekimen1="‚Ù‚Á‚Ø‚P"
+local path_sekimen2="‚Ù‚Á‚Ø‚Q"
+local path_face={}
+path_face[1]="’Êí‚P"
+path_face[2]="’Êí‚Q"
+path_face[3]="’Êí‚R"
+path_face[4]="ÎŠç‚P"
+path_face[5]="ÎŠç‚P{"
+path_face[6]="ÎŠç‚Q"
+path_face[7]="ÎŠç‚R"
+path_face[8]="‚¢‚­‚º‚Á"
+path_face[9]="‚Ş‚Ş‚Ş‚Á"
+path_face[10]="‚¨‚±‚¾‚æ"
+path_face[11]="ÄŞÔ¯"
+path_face[12]="YAHOO"
+path_face[13]="‚Ğ‚á‚ñ"
+path_face[14]="‚Í‚í‚í"
+path_face[15]="‚Ó‚Ş"
+path_face[16]="“¾ˆÓ‚°"
+path_face[17]="ÄŞÔÔ§"
+path_face[18]="ƒEƒCƒ“ƒN"
+path_face[19]="Æ¨"
+path_face[20]="Ñ½¯"
+path_face[21]="Ê¯Ê°İ"
+path_face[22]="·Ş¬°½"
+path_face[23]="±Íª"
+local path_kaokage="‰e"
+local path_reaction={}
+path_reaction[1]="ƒ°"
+path_reaction[2]="H"
+path_reaction[3]="I"
+path_reaction[4]="IH"
+path_reaction[5]="·×·×"
+path_reaction[6]="‚¨‚Á"
+path_reaction[7]="‚Í[‚Æ‚P"
+path_reaction[8]="‚Í[‚Æ‚Q"
+path_reaction[9]="ô"
+path_reaction[10]="‚¨‚±"
+local path_awateru="Š¾‚R"
+local path_dekaase="Š¾‚S"
+local path_tameiki="‚Ó‚£"
+local path_namida="—Ü"
+
+
+ts.drfirst(1024,1280)
+
+--[[¦1
+function tatiedraw()
+]]
+
+if(tesc.ckcache(confchangechk,obj.layer)==true) then
+    ts.hantenval(hanten)
+    ts.sozaipathval(sozaipath)
+    ts.reverseval(path_reverse)
+
+    ts.nomdraw(path_base)
+    ts.onoff2(huku,ts.revpath(path_huku),ts.revpath(path_huku))
+    ts.onlyfilter(huku,2,path_sode,"")
+    ts.onoff(kneeso,path_kneeso)
+    ts.onoff(headparts,ts.revpath(path_kamikazari))
+    ts.dual(hitaiase,path_hitaiase1,path_hitaiase2)
+    ts.onoff(hitaikage,path_kaokage)
+    ts.zerooff(hyoujo,path_face[hyoujo])
+    ts.dual(sekimen,path_sekimen1,path_sekimen2)
+    ts.zerooff(reaction,path_reaction[reaction])
+    ts.onoff(dekaase,path_dekaase)
+    ts.onoff(aseru,path_awateru)
+    ts.onoff(tameiki,path_tameiki)
+    ts.onoff(namida,path_namida)
+
+    ts.cache(obj.layer,confchangechk)
+end
+
+obj.load("tempbuffer")
+
+
+
+--[[
+if(cacheswitch==true) then
+    if(tesc.ckcache(confchangechk,obj.layer)==true) then
+        tatiedraw()
+        tesc.cache(obj.layer,confchangechk)
+    end
+else
+    tatiedraw()
+end
+]]
