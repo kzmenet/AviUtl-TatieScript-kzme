@@ -6,9 +6,12 @@
 --track3:額汗,0,3,0,1
 
 --モジュールロード
-require("tesc")
-require("spg")
-require("gvgen_kzme_tatie_cktmp")
+--gvgenのモジュールの名前が糞長いですが、tescモジュールでの呼び出しはこれなので諦めてください。
+--なおtescに関しては変数名を変えることで書きやすくなると思います。
+package.path = obj.getinfo("script_path").."mod\\?.lua"
+local tesc = require("tesc")
+local spg = require("spg")
+local gvgen_kzme_tatie_cktmp = require("gvgen_kzme_tatie_cktmp")
 
 --キャッシュONOFF変数（デフォルトでは効力を発揮しません。詳しくはコードの下の方を御覧ください。）
 local cacheswitch = true
