@@ -1,5 +1,11 @@
 module( "spg", package.seeall )
-
+--[[
+spg.lua
+Copyright (C) 2016 MurataKazumi
+このプログラムはフリープログラムです。
+GNU Lesser General Public License Version 3ライセンスのもとに変更、再配布が可能です。
+詳しくは付属のLICENSEファイルを御覧ください。
+]]
 --デバッグ用
 local debugmode=true
 local function devprnt(naiyou)

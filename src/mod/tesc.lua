@@ -2,6 +2,12 @@ module( "tesc", package.seeall )
 --[[
 TachiESCript
 立ち絵スクリプト制作を支援するmoduleです。
+
+tesc.lua
+Copyright (C) 2016 MurataKazumi
+このプログラムはフリープログラムです。
+GNU Lesser General Public License Version 3ライセンスのもとに変更、再配布が可能です。
+詳しくは付属のLICENSEファイルを御覧ください。
 ]]
 
 --デバッグ用
