@@ -50,7 +50,11 @@ obj.draw()
 end
 
 local function objdraw(file)
+    if(file~="")then
     spg.dr(sp..file,ht)
+    else
+    spg.dr("")
+    end
 end
 
 function ckcache(setting,layer)

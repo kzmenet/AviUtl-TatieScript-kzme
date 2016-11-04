@@ -16,8 +16,14 @@ end
 --デバッグおわり
 
 function dr(uri,ht,mode)
+
+    if(uri=="") then
+    obj.load("text","")
+    devprnt("objectload uri:none")
+    else
     obj.load("image",uri..".png")
     devprnt("objectload uri:"..uri)
+    end
     if(ht==1) then
         obj.draw(0,0,0,1,1,0,180,0)
         devprnt("nomal draw (mirror)")

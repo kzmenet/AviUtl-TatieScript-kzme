@@ -90,7 +90,7 @@ if(tesc.ckcache(confchangechk,obj.layer)==true) then
 
     ts.nomdraw(path_base)
     ts.onoff2(huku,ts.revpath(path_huku),ts.revpath(path_huku))
-    ts.onlyfilter(huku,2,path_sode)
+    ts.onlyfilter(huku,2,path_sode,"")
     ts.onoff(kneeso,path_kneeso)
     ts.onoff(headparts,ts.revpath(path_kamikazari))
     ts.dual(hitaiase,path_hitaiase1,path_hitaiase2)
