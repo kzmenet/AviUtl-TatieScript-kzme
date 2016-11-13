@@ -1,0 +1,88 @@
+--dialog:反転(0-1),hanten=0;ムカつき/chk,mukatuki=0;デカ汗/chk,dekaase=0;焦る/chk,aseru=0;
+--track0:表情,0,24,1,1
+--track1:赤面,0,3,1,1
+--track2:額汗,0,1,0,1
+--track3:リアクション,0,8,1,1
+--check0:額影,0
+
+package.path = obj.getinfo("script_path").."mod\\?.lua"
+local tc = require("tesc")
+local spg = require("spg")
+local gvgen_kzme_tatie_cktmp = require("gvgen_kzme_tatie_cktmp")
+
+local hitaikage=1
+if (obj.check0==true) then
+hitaikage=1
+else
+hitaikage=0
+end
+
+local hyoujo=obj.track0
+local sekimen=obj.track1
+local hitaiase=obj.track2
+local reaction=obj.track3
+
+local confck="TKMZ_琴葉茜"..hanten..mukatuki..dekaase..aseru..hitaikage..hyoujo..sekimen..hitaiase..hitaikage..reaction
+
+local sozaipath=obj.getinfo("script_path").."akane_tasikanamanzoku\\"
+local pbase="other\\茜"
+local pkage="other\\青カゲ"
+local pface={}
+pface[1]="face\\笑顔(開き口)"
+pface[2]="face\\笑顔(中口)"
+pface[3]="face\\笑顔(閉じ口)"
+pface[4]="face\\笑顔2(開き口)"
+pface[5]="face\\笑顔2(中口)"
+pface[6]="face\\笑顔2(閉じ口)"
+pface[7]="face\\笑顔Hi無し"
+pface[8]="face\\困り"
+pface[9]="face\\困り２"
+pface[10]="face\\むふふ～"
+pface[11]="face\\まじで！"
+pface[12]="face\\まじおこ！"
+pface[13]="face\\まじおこ２"
+pface[14]="face\\ほえ？"
+pface[15]="face\\どやぁ！"
+pface[16]="face\\おお！？"
+pface[17]="face\\え！？"
+pface[18]="face\\ウインク"
+pface[19]="face\\ギャグ顔・ドヤァ"
+pface[20]="face\\ギャグ顔・ふふん"
+pface[21]="face\\ギャグ顔・もー"
+pface[22]="face\\ギャグ顔・イエーイ"
+pface[23]="face\\ギャグ顔・？"
+pface[24]="face\\ギャグ顔・泣き"
+local peffect={}
+peffect[1]="effect\\！"
+peffect[2]="effect\\！？"
+peffect[3]="effect\\？"
+peffect[4]="effect\\♪"
+peffect[5]="effect\\きらーん"
+peffect[6]="effect\\ビックリ"
+peffect[7]="effect\\わはは"
+peffect[8]="effect\\気付きエフェクト"
+local pmuka="effect\\ムカつき"
+local pdekaase="effect\\汗１"
+local paseru="effect\\汗２"
+local psekimen1="addon\\ほほ１(デフォルト表示)"
+local psekimen2="addon\\ほほ２"
+local pase="addon\\汗"
+
+tc.drfirst(960,1280)
+if(tc.ckcache(confck,obj.layer)==true) then
+    tc.hantenval(hanten)
+    tc.sozaipathval(sozaipath)
+    tc.reverseval("")
+    tc.nomdraw(pbase)
+    tc.onoff(hitaikage,pkage)
+    tc.dual(sekimen,psekimen1,psekimen2)
+    tc.zerooff(hyoujo,pface[hyoujo])
+    tc.onoff(hitaiase,pase)
+    tc.onoff(mukatuki,pmuka)
+    tc.onoff(dekaase,pdekaase)
+    tc.onoff(aseru,paseru)
+    tc.zerooff(reaction,peffect[reaction])
+    tc.cache(obj.layer,confck)
+end
+
+obj.load("tempbuffer")
